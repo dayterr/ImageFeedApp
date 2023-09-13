@@ -50,16 +50,29 @@ final class OAuth2Service {
     }
     
     func fetchOAuthToken(_ code: String, completion: @escaping (Result<String, Error>) -> Void) {
-        let URLString: String = """
-            /oauth/token
-            ?client_id=\(AccessKey)
-            &&client_secret=\(SecretKey)
-            &&redirect_uri=\(RedirectURI)
-            &&code=\(code)
-            &&grant_type=authorization_code
-            """
+        let URLString: String = "/oauth/token" +
+            "?client_id=\(AccessKey)" +
+            "&&client_secret=\(SecretKey)" +
+            "&&redirect_uri=\(RedirectURI)" +
+            "&&code=\(code)" +
+            "&&grant_type=authorization_code"
+            
+        
+        var url: URL {
+            guard let url = URL(string: URLString) else {
+                preconditionFailure("Не удалось получить доступ к unsplash.com")
+            }
+            return url
+        }
+        
+        var requestURL: URL {
+            guard let requestURL = URL(string: URLString, relativeTo: DefaultBaseURL) else {
+                preconditionFailure("Failed to build URL")
+            }
+            return requestURL
+        }
     
-        var request = URLRequest(url: URL(string: URLString)!)
+        var request = URLRequest(url: requestURL)
         request.httpMethod = "POST"
         
         let task = self.object(for: request) { [weak self] result in
