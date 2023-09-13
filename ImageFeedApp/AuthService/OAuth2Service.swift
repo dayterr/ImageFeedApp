@@ -56,14 +56,7 @@ final class OAuth2Service {
             "&&redirect_uri=\(RedirectURI)" +
             "&&code=\(code)" +
             "&&grant_type=authorization_code"
-            
-        var requestURL: URL {
-            guard let requestURL = URL(string: URLString, relativeTo: DefaultBaseURL) else {
-                preconditionFailure("Failed to build URL")
-            }
-            return requestURL
-        }
-    
+
         var request = URLRequest(url: requestURL)
         request.httpMethod = "POST"
         
