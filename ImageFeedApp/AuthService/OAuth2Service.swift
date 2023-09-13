@@ -57,14 +57,6 @@ final class OAuth2Service {
             "&&code=\(code)" +
             "&&grant_type=authorization_code"
             
-        
-        var url: URL {
-            guard let url = URL(string: URLString) else {
-                preconditionFailure("Не удалось получить доступ к unsplash.com")
-            }
-            return url
-        }
-        
         var requestURL: URL {
             guard let requestURL = URL(string: URLString, relativeTo: DefaultBaseURL) else {
                 preconditionFailure("Failed to build URL")
