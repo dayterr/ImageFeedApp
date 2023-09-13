@@ -52,10 +52,10 @@ final class OAuth2Service {
     func fetchOAuthToken(_ code: String, completion: @escaping (Result<String, Error>) -> Void) {
         let URLString: String = "/oauth/token" +
             "?client_id=\(AccessKey)" +
-            "&&client_secret=\(SecretKey)" +
-            "&&redirect_uri=\(RedirectURI)" +
-            "&&code=\(code)" +
-            "&&grant_type=authorization_code"
+            "&client_secret=\(SecretKey)" +
+            "&redirect_uri=\(RedirectURI)" +
+            "&code=\(code)" +
+            "&grant_type=authorization_code"
         
         var requestURL: URL {
             guard let requestURL = URL(string: URLString, relativeTo: DefaultBaseURL) else {

@@ -7,8 +7,8 @@
 
 import Foundation
 
-let AccessKey = "Tm6YzLmF8pToZy6e4xn_u8irsVccrTooVsrNJBvlZA0"
-let SecretKey = "7sAG1fBtWKKw3DaVaWQpkaayTTSruZU3XOL9DSATWaI"
+let AccessKey = "rQQC1XoNd0KDMAIjwsOZO1QzxwC4uxd5U9upvCuORSA"
+let SecretKey = "ZeW15VEB9oyeM8PSr4gg1Teqg5zlVeEt_uJTlbaWkzI"
 let RedirectURI = "urn:ietf:wg:oauth:2.0:oob"
 let AccessScope = "public+read_user+write_likes"
-let DefaultBaseURL = URL(string: "https://api.unsplash.com")!
+let DefaultBaseURL = URL(string: "https://unsplash.com")!

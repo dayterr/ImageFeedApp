@@ -19,8 +19,8 @@ final class SplashViewController: UIViewController {
 
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
-
-        if let token = oauth2TokenStorage.token {
+        
+        if oauth2TokenStorage.token != nil {
             switchToTabBarController()
         } else {
             performSegue(withIdentifier: ShowAuthenticationScreenSegueIdentifier, sender: nil)
@@ -64,7 +64,9 @@ extension SplashViewController: AuthViewControllerDelegate {
         oauth2Service.fetchOAuthToken(code) { [weak self] result in
             guard let self = self else { return }
             switch result {
+                
             case .success:
+                print(code)
                 self.switchToTabBarController()
             case .failure:
                 break
