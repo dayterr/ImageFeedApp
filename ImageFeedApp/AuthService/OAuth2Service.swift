@@ -36,6 +36,8 @@ final class OAuth2Service {
             OAuth2TokenStorage().token = newValue
         }
     }
+    private var task: URLSessionTask?
+    private var lastCode: String?
     
     private func object(for request: URLRequest, completion: @escaping (Result<OAuthTokenResponseBody, Error>) -> Void) -> URLSessionTask {
         let decoder = JSONDecoder()
@@ -50,6 +52,20 @@ final class OAuth2Service {
     }
     
     func fetchOAuthToken(_ code: String, completion: @escaping (Result<String, Error>) -> Void) {
+        assert(Thread.isMainThread)
+        
+        if task != nil {
+            if lastCode != code {
+                task?.cancel()
+            } else {
+                return
+            }
+        } else {
+            if lastCode == code {
+                return
+            }
+        }
+        
         let URLString: String = "/oauth/token" +
             "?client_id=\(AccessKey)" +
             "&client_secret=\(SecretKey)" +
@@ -63,21 +79,30 @@ final class OAuth2Service {
             }
             return requestURL
         }
+        
+        lastCode = code
 
         var request = URLRequest(url: requestURL)
         request.httpMethod = "POST"
         
-        let task = self.object(for: request) { [weak self] result in
-            guard let self = self else { return }
-            switch result {
-            case .success(let body):
-                let authToken = body.accessToken
-                self.authToken = authToken
-                completion(.success(authToken))
-            case .failure(let error):
-                completion(.failure(error))
+        let task = object(for: request) { [weak self] (result: Result<OAuthTokenResponseBody, Error>) in
+            DispatchQueue.main.async {
+                guard let self = self else { return }
+                switch result {
+                case .success(let body):
+                    let authToken = body.accessToken
+                    self.authToken = authToken
+                    self.task = nil
+                    completion(.success(authToken))
+                    
+                case .failure(let error):
+                    self.lastCode = nil
+                    completion(.failure(error))
+                }
             }
         }
+        
+        self.task = task
         task.resume()
     }
 }
