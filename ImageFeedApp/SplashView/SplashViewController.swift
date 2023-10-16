@@ -13,6 +13,8 @@ final class SplashViewController: UIViewController {
 
     private let oauth2Service = OAuth2Service()
     private let oauth2TokenStorage = OAuth2TokenStorage()
+    private let profileService = ProfileService.shared
+    private let profileImageService = ProfileImageService.shared
     
     override var preferredStatusBarStyle: UIStatusBarStyle {
         .lightContent
@@ -76,5 +78,23 @@ extension SplashViewController: AuthViewControllerDelegate {
             }
         }
     }
+    
+    private func fetchProfile(token: String) {
+        profileService.fetchProfile { [weak self] result in
+            guard let self = self else { return }
+            switch result {
+            case .success:
+                UIBlockingProgressHUD.dismiss()
+                guard let username = self.profileService.profile?.username else { return }
+                self.profileImageService.fetchProfileImageURL(username: username) { _ in }
+                DispatchQueue.main.async {
+                    self.switchToTabBarController()
+                }
+            case .failure:
+                UIBlockingProgressHUD.dismiss()
+                // TODO [Sprint 11] Показать ошибку
+                break
+            }
+        }
+    }
 }
-

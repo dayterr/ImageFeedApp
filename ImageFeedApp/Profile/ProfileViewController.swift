@@ -5,9 +5,44 @@
 //  Created by Ruth Dayter on 09.07.2023.
 //
 
+import Kingfisher
 import UIKit
 
 final class ProfileViewController: UIViewController {
+    
+    private let profileService = ProfileService()
+    private var profileImageServiceObserver: NSObjectProtocol?
+    
+    override init(nibName: String?, bundle: Bundle?) {
+        super.init(nibName: nibName, bundle: bundle)
+        addObserver()
+    }
+    
+    required init?(coder: NSCoder) {
+        super.init(coder: coder)
+        addObserver()
+    }
+    
+    deinit {
+        removeObserver()
+    }
+    
+    private func addObserver() {
+        NotificationCenter.default.addObserver(
+            forName: ProfileImageService.DidChangeNotification,
+            object: nil,
+            queue: .main) { [weak self] _ in
+                guard let self = self else { return }
+                self.updateAvatar()
+            }
+    }
+    
+    private func removeObserver() {
+        NotificationCenter.default.removeObserver(
+            self,
+            name: ProfileImageService.DidChangeNotification,
+            object: nil)
+    }
     
     private let profileImage: UIImageView = {
         let profileImage = UIImageView()
@@ -51,10 +86,35 @@ final class ProfileViewController: UIViewController {
     }()
 
     override func viewDidLoad() {
-            super.viewDidLoad()
-            view.backgroundColor = .ypBlack
-            addSubViews()
-            applyConstraints()
+        super.viewDidLoad()
+        view.backgroundColor = .ypBlack
+        profileImageServiceObserver = NotificationCenter.default.addObserver(
+            forName: ProfileImageService.DidChangeNotification,
+            object: nil,
+            queue: .main                                        // 5
+        ) { [weak self] _ in
+            guard let self = self else { return }
+            self.updateAvatar()                                 // 6
+        }
+        addSubViews()
+        applyConstraints()
+        updateProfile(profile: profileService.profile!)
+        updateAvatar()
+    }
+    
+    private func updateAvatar() {                                   // 8
+        guard
+            let profileImageURL = ProfileImageService.shared.avatarURL,
+            let url = URL(string: profileImageURL)
+        else { return }
+        let processor = RoundCornerImageProcessor(cornerRadius: profileImage.frame.width)
+        profileImage.kf.indicatorType = .activity
+        profileImage.kf.setImage(with: url,
+                              placeholder: UIImage(named: "person.crop.circle.fill.png"),
+                              options: [.processor(processor),.cacheSerializer(FormatIndicatedCacheSerializer.png)])
+        let cache = ImageCache.default
+        cache.clearDiskCache()
+        cache.clearMemoryCache()
     }
     
     private func addSubViews() {
@@ -63,6 +123,19 @@ final class ProfileViewController: UIViewController {
         view.addSubview(nameLabel)
         view.addSubview(emailLabel)
         view.addSubview(descriptionLabel)
+    }
+    
+    private func updateProfileDetails(profile: Profile?) {
+        guard let profile = profileService.profile else { return }
+        nameLabel.text = profile.name
+        descriptionLabel.text = profile.bio
+    }
+    
+    private func updateProfile(profile: Profile?) {
+        guard let profile = profileService.profile else { return }
+        nameLabel.text = profile.name
+        emailLabel.text = profile.loginName
+        descriptionLabel.text = profile.bio
     }
     
     private func applyConstraints() {
@@ -96,4 +169,5 @@ final class ProfileViewController: UIViewController {
             descriptionLabel.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -282),
         ])
     }
+
 }

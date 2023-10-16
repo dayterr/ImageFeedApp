@@ -38,18 +38,7 @@ final class OAuth2Service {
     }
     private var task: URLSessionTask?
     private var lastCode: String?
-    
-    private func object(for request: URLRequest, completion: @escaping (Result<OAuthTokenResponseBody, Error>) -> Void) -> URLSessionTask {
-        let decoder = JSONDecoder()
-        return urlSession.data(for: request) {
-            (result: Result<Data, Error>) in
-            let response = result.flatMap {
-                data -> Result<OAuthTokenResponseBody, Error> in
-                Result { try decoder.decode(OAuthTokenResponseBody.self, from: data) }
-            }
-            completion(response)
-        }
-    }
+
     
     func fetchOAuthToken(_ code: String, completion: @escaping (Result<String, Error>) -> Void) {
         assert(Thread.isMainThread)
@@ -85,7 +74,7 @@ final class OAuth2Service {
         var request = URLRequest(url: requestURL)
         request.httpMethod = "POST"
         
-        let task = object(for: request) { [weak self] (result: Result<OAuthTokenResponseBody, Error>) in
+        let task = urlSession.objectTask(for: request) { [weak self] (result: Result<OAuthTokenResponseBody, Error>) in
             DispatchQueue.main.async {
                 guard let self = self else { return }
                 switch result {
@@ -107,28 +96,3 @@ final class OAuth2Service {
     }
 }
 
-extension URLSession {
-    func data(for request: URLRequest, completion: @escaping (Result<Data, Error>) -> Void) -> URLSessionTask {
-        let successfulCompletion: (Result<Data, Error>) -> Void = { result in
-            DispatchQueue.main.async {
-                completion(result)
-            }
-        }
-        let task = dataTask(with: request, completionHandler: { data, response, error in
-            if let data = data,
-               let response = response,
-               let statusCode = (response as? HTTPURLResponse)?.statusCode
-            {
-                if let error = error {
-                    successfulCompletion(.failure(error))
-                }
-                if statusCode < 200 || statusCode >= 300 {
-                    successfulCompletion(.failure(NetworkError.codeError))
-                }
-                successfulCompletion(.success(data))
-            }
-        } )
-        task.resume()
-        return task
-    }
-}
