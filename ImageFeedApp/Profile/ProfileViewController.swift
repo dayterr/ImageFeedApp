@@ -5,13 +5,21 @@
 //  Created by Ruth Dayter on 09.07.2023.
 //
 
+import Kingfisher
 import UIKit
 
 final class ProfileViewController: UIViewController {
     
+    private let profileService = ProfileService.shared
+    private var profileImageServiceObserver: NSObjectProtocol?
+
+    
     private let profileImage: UIImageView = {
         let profileImage = UIImageView()
         profileImage.image = UIImage(named: "userpick")
+        profileImage.layer.cornerRadius = profileImage.frame.size.width / 2
+        profileImage.clipsToBounds = true
+        profileImage.contentMode = .scaleAspectFill
         profileImage.translatesAutoresizingMaskIntoConstraints = false
         return profileImage
     }()
@@ -51,10 +59,40 @@ final class ProfileViewController: UIViewController {
     }()
 
     override func viewDidLoad() {
-            super.viewDidLoad()
-            view.backgroundColor = .ypBlack
-            addSubViews()
-            applyConstraints()
+        super.viewDidLoad()
+        
+        addSubViews()
+        applyConstraints()
+        updateProfile(profile: profileService.profile!)
+        
+        view.backgroundColor = .ypBlack
+        profileImageServiceObserver = NotificationCenter.default.addObserver(
+            forName: ProfileImageService.DidChangeNotification,
+            object: nil,
+            queue: .main                                        // 5
+        ) { [weak self] _ in
+            guard let self = self else { return }
+            self.updateAvatar()                                 // 6
+        }
+    
+        
+        updateAvatar()
+    }
+    
+    private func updateAvatar() {                                   // 8
+        guard
+            let profileImageURL = ProfileImageService.shared.avatarURL,
+            let url = URL(string: profileImageURL)
+        else { return }
+        let processor = RoundCornerImageProcessor(cornerRadius: 20)
+        profileImage.kf.indicatorType = .activity
+        profileImage.kf.setImage(with: url,
+                              placeholder: UIImage(named: "userpick"),
+                              options: [.processor(processor),.cacheSerializer(FormatIndicatedCacheSerializer.png)])
+        
+        let cache = ImageCache.default
+        cache.clearDiskCache()
+        cache.clearMemoryCache()
     }
     
     private func addSubViews() {
@@ -63,6 +101,13 @@ final class ProfileViewController: UIViewController {
         view.addSubview(nameLabel)
         view.addSubview(emailLabel)
         view.addSubview(descriptionLabel)
+    }
+    
+    private func updateProfile(profile: Profile?) {
+        guard let profile = profileService.profile else { return }
+        nameLabel.text = profile.name
+        emailLabel.text = profile.loginName
+        descriptionLabel.text = profile.bio
     }
     
     private func applyConstraints() {
@@ -96,4 +141,5 @@ final class ProfileViewController: UIViewController {
             descriptionLabel.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -282),
         ])
     }
+
 }
