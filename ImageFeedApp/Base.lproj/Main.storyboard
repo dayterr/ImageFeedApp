@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="21507" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="UQz-kK-gqU">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="21507" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
     <device id="retina6_12" orientation="portrait" appearance="light"/>
     <dependencies>
         <deployment identifier="iOS"/>
@@ -12,7 +12,7 @@
         <!--Images List View Controller-->
         <scene sceneID="tne-QT-ifu">
             <objects>
-                <viewController id="BYZ-38-t0r" customClass="ImagesListViewController" customModule="ImageFeedApp" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="ImagesListViewController" id="BYZ-38-t0r" customClass="ImagesListViewController" customModule="ImageFeedApp" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="8bC-Xf-vdC">
                         <rect key="frame" x="0.0" y="0.0" width="393" height="852"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -55,7 +55,7 @@
                                                 <constraint firstItem="qnh-k3-vxI" firstAttribute="trailingMargin" relation="greaterThanOrEqual" secondItem="iWU-Pn-bPq" secondAttribute="trailing" constant="8" id="Eb5-U9-rph"/>
                                                 <constraint firstItem="qnh-k3-vxI" firstAttribute="top" secondItem="zpY-tL-iSy" secondAttribute="top" constant="4" id="I7V-Bc-KQ5"/>
                                                 <constraint firstAttribute="trailing" secondItem="qnh-k3-vxI" secondAttribute="trailing" constant="16" id="J9U-ha-X2N"/>
-                                                <constraint firstItem="qnh-k3-vxI" firstAttribute="bottomMargin" secondItem="iWU-Pn-bPq" secondAttribute="bottom" constant="8" id="NCl-oJ-3Bm"/>
+                                                <constraint firstItem="qnh-k3-vxI" firstAttribute="bottomMargin" secondItem="iWU-Pn-bPq" secondAttribute="bottom" constant="8" id="NCl-oJ-3Bm" userLabel="Cell Image.bottom = Date Label.bottom + 8"/>
                                                 <constraint firstItem="iWU-Pn-bPq" firstAttribute="leading" secondItem="qnh-k3-vxI" secondAttribute="leadingMargin" constant="8" id="Szj-uv-UUX"/>
                                                 <constraint firstItem="qDt-Ld-aYZ" firstAttribute="top" secondItem="zpY-tL-iSy" secondAttribute="topMargin" id="hHe-qx-lvZ"/>
                                                 <constraint firstItem="qnh-k3-vxI" firstAttribute="leading" secondItem="zpY-tL-iSy" secondAttribute="leading" constant="16" id="kbS-MB-58K"/>
@@ -99,7 +99,7 @@
         <!--Tab Bar Controller-->
         <scene sceneID="PYT-wC-ozB">
             <objects>
-                <tabBarController storyboardIdentifier="TabBarViewController" id="d2R-Sf-Lon" customClass="TabBarController" sceneMemberID="viewController">
+                <tabBarController storyboardIdentifier="TabBarViewController" id="d2R-Sf-Lon" customClass="TabBarController" customModule="ImageFeedApp" sceneMemberID="viewController">
                     <tabBar key="tabBar" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" id="VoQ-Ya-qiF">
                         <rect key="frame" x="0.0" y="0.0" width="393" height="49"/>
                         <autoresizingMask key="autoresizingMask"/>
@@ -114,34 +114,10 @@
             </objects>
             <point key="canvasLocation" x="-6638" y="-400"/>
         </scene>
-        <!--Navigation Controller-->
-        <scene sceneID="yUy-xe-cYz">
-            <objects>
-                <navigationController automaticallyAdjustsScrollViewInsets="NO" id="rks-T3-A9B" sceneMemberID="viewController">
-                    <tabBarItem key="tabBarItem" title="" image="tab_editorial_active" id="4GD-gy-B1C"/>
-                    <toolbarItems/>
-                    <navigationBar key="navigationBar" contentMode="scaleToFill" id="pGj-qD-2W5">
-                        <rect key="frame" x="0.0" y="59" width="393" height="44"/>
-                        <autoresizingMask key="autoresizingMask"/>
-                        <color key="tintColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                        <color key="barTintColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                        <navigationBarAppearance key="standardAppearance">
-                            <color key="backgroundColor" red="0.10196078431372549" green="0.10588235294117647" blue="0.13333333333333333" alpha="0.0" colorSpace="custom" customColorSpace="sRGB"/>
-                        </navigationBarAppearance>
-                    </navigationBar>
-                    <nil name="viewControllers"/>
-                    <connections>
-                        <segue destination="BYZ-38-t0r" kind="relationship" relationship="rootViewController" id="OxO-Vf-8pZ"/>
-                    </connections>
-                </navigationController>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="mbk-SK-x54" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
-            </objects>
-            <point key="canvasLocation" x="46.564885496183201" y="-2.1126760563380285"/>
-        </scene>
         <!--Single Image View Controller-->
         <scene sceneID="PB8-kN-2bO">
             <objects>
-                <viewController modalPresentationStyle="fullScreen" id="8V0-TF-Ld4" customClass="SingleImageViewController" customModule="ImageFeedApp" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController modalPresentationStyle="fullScreen" id="8V0-TF-Ld4" customClass="SingleImageViewController" customModule="ImageFeedApp" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="Oaz-Zo-qQf">
                         <rect key="frame" x="0.0" y="0.0" width="393" height="852"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -344,7 +320,6 @@
         <image name="like_button_on" width="30" height="28"/>
         <image name="nav_back_button" width="24" height="24"/>
         <image name="sharing_button" width="51" height="50"/>
-        <image name="tab_editorial_active" width="30" height="30"/>
         <systemColor name="systemBackgroundColor">
             <color white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
         </systemColor>

@@ -10,43 +10,16 @@ import UIKit
 
 final class ProfileViewController: UIViewController {
     
-    private let profileService = ProfileService()
+    private let profileService = ProfileService.shared
     private var profileImageServiceObserver: NSObjectProtocol?
-    
-    override init(nibName: String?, bundle: Bundle?) {
-        super.init(nibName: nibName, bundle: bundle)
-        addObserver()
-    }
-    
-    required init?(coder: NSCoder) {
-        super.init(coder: coder)
-        addObserver()
-    }
-    
-    deinit {
-        removeObserver()
-    }
-    
-    private func addObserver() {
-        NotificationCenter.default.addObserver(
-            forName: ProfileImageService.DidChangeNotification,
-            object: nil,
-            queue: .main) { [weak self] _ in
-                guard let self = self else { return }
-                self.updateAvatar()
-            }
-    }
-    
-    private func removeObserver() {
-        NotificationCenter.default.removeObserver(
-            self,
-            name: ProfileImageService.DidChangeNotification,
-            object: nil)
-    }
+
     
     private let profileImage: UIImageView = {
         let profileImage = UIImageView()
         profileImage.image = UIImage(named: "userpick")
+        profileImage.layer.cornerRadius = profileImage.frame.size.width / 2
+        profileImage.clipsToBounds = true
+        profileImage.contentMode = .scaleAspectFill
         profileImage.translatesAutoresizingMaskIntoConstraints = false
         return profileImage
     }()
@@ -87,6 +60,11 @@ final class ProfileViewController: UIViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        addSubViews()
+        applyConstraints()
+        updateProfile(profile: profileService.profile!)
+        
         view.backgroundColor = .ypBlack
         profileImageServiceObserver = NotificationCenter.default.addObserver(
             forName: ProfileImageService.DidChangeNotification,
@@ -96,9 +74,8 @@ final class ProfileViewController: UIViewController {
             guard let self = self else { return }
             self.updateAvatar()                                 // 6
         }
-        addSubViews()
-        applyConstraints()
-        updateProfile(profile: profileService.profile!)
+    
+        
         updateAvatar()
     }
     
@@ -107,11 +84,12 @@ final class ProfileViewController: UIViewController {
             let profileImageURL = ProfileImageService.shared.avatarURL,
             let url = URL(string: profileImageURL)
         else { return }
-        let processor = RoundCornerImageProcessor(cornerRadius: profileImage.frame.width)
+        let processor = RoundCornerImageProcessor(cornerRadius: 20)
         profileImage.kf.indicatorType = .activity
         profileImage.kf.setImage(with: url,
-                              placeholder: UIImage(named: "person.crop.circle.fill.png"),
+                              placeholder: UIImage(named: "userpick"),
                               options: [.processor(processor),.cacheSerializer(FormatIndicatedCacheSerializer.png)])
+        
         let cache = ImageCache.default
         cache.clearDiskCache()
         cache.clearMemoryCache()
@@ -123,12 +101,6 @@ final class ProfileViewController: UIViewController {
         view.addSubview(nameLabel)
         view.addSubview(emailLabel)
         view.addSubview(descriptionLabel)
-    }
-    
-    private func updateProfileDetails(profile: Profile?) {
-        guard let profile = profileService.profile else { return }
-        nameLabel.text = profile.name
-        descriptionLabel.text = profile.bio
     }
     
     private func updateProfile(profile: Profile?) {

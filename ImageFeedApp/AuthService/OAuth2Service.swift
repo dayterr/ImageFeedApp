@@ -8,6 +8,7 @@
 import Foundation
 
 enum NetworkError: Error {
+    case responseError
     case codeError
 }
 
@@ -63,7 +64,7 @@ final class OAuth2Service {
             "&grant_type=authorization_code"
         
         var requestURL: URL {
-            guard let requestURL = URL(string: URLString, relativeTo: DefaultBaseURL) else {
+            guard let requestURL = URL(string: URLString, relativeTo: URL(string: "https://unsplash.com")!) else {
                 preconditionFailure("Failed to build URL")
             }
             return requestURL
@@ -77,6 +78,7 @@ final class OAuth2Service {
         let task = urlSession.objectTask(for: request) { [weak self] (result: Result<OAuthTokenResponseBody, Error>) in
             DispatchQueue.main.async {
                 guard let self = self else { return }
+                
                 switch result {
                 case .success(let body):
                     let authToken = body.accessToken

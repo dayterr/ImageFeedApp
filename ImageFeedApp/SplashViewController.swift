@@ -18,7 +18,7 @@ final class SplashViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        
+
         createSplashController()
     }
     
@@ -35,7 +35,7 @@ final class SplashViewController: UIViewController {
     
     private func createSplashController() {
         view.backgroundColor = UIColor(named: "YPBlack")
-        let screenLogoImage = UIImage(named: "ImageLaunchScreen")
+        let screenLogoImage = UIImage(named: "logo")
         let screenLogoImageView = UIImageView(image: screenLogoImage)
         screenLogoImageView.translatesAutoresizingMaskIntoConstraints = false
         view.addSubview(screenLogoImageView)

@@ -52,9 +52,16 @@ final class ProfileService {
         
         var request = URLRequest(url: requestURL)
         request.httpMethod = "GET"
+        var authToken: String {
+            guard let authToken = OAuth2TokenStorage().token else {
+                return ""
+            }
+            return authToken
+        }
+
+        request.setValue("Bearer \(authToken)", forHTTPHeaderField: "Authorization")
         
-        let task = urlSession.objectTask(for: request) { [weak self] (result: Result<ProfileBody, Error>) in
-            DispatchQueue.main.async {
+        let task = urlSession.objectTask(for: request) { [weak self] (result: Result<ProfileBody, Error>) in DispatchQueue.main.async {
                 guard let self = self else { return }
                 switch result {
                 case .success(let body):
@@ -70,6 +77,8 @@ final class ProfileService {
             }
             
         }
+        self.task = task
+        task.resume()
     }
 }
 

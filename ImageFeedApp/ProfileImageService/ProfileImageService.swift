@@ -48,6 +48,13 @@ final class ProfileImageService {
         
         var requestImage = URLRequest(url: requestURL)
         requestImage.httpMethod = "GET"
+        var authToken: String {
+            guard let authToken = OAuth2TokenStorage().token else {
+                return ""
+            }
+            return authToken
+        }
+        requestImage.setValue("Bearer \(authToken)", forHTTPHeaderField: "Authorization")
         
         let task = urlSession.objectTask(for: requestImage) { [weak self] (result: Result<UserResult, Error>) in
             DispatchQueue.main.async {
@@ -69,6 +76,7 @@ final class ProfileImageService {
                 }
             }
         }
+
         self.task = task
         task.resume()
     }
