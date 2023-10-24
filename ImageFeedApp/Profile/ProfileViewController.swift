@@ -7,11 +7,13 @@
 
 import Kingfisher
 import UIKit
+import WebKit
 
 final class ProfileViewController: UIViewController {
     
     private let profileService = ProfileService.shared
     private var profileImageServiceObserver: NSObjectProtocol?
+    private let oAuth2TokenStorage = OAuth2TokenStorage()
 
     
     private let profileImage: UIImageView = {
@@ -22,13 +24,6 @@ final class ProfileViewController: UIViewController {
         profileImage.contentMode = .scaleAspectFill
         profileImage.translatesAutoresizingMaskIntoConstraints = false
         return profileImage
-    }()
-
-    private let logoutButton: UIButton = {
-        let logoutButton = UIButton()
-        logoutButton.setImage(UIImage(named: "logout_button"), for: .normal)
-        logoutButton.translatesAutoresizingMaskIntoConstraints = false
-        return logoutButton
     }()
     
     private let nameLabel: UILabel = {
@@ -57,9 +52,16 @@ final class ProfileViewController: UIViewController {
         descriptionLabel.translatesAutoresizingMaskIntoConstraints = false
         return descriptionLabel
     }()
+    
+    private var logoutButton: UIButton = UIButton.systemButton(with: UIImage(imageLiteralResourceName: "logout_button"), target: self, action: #selector(Self.didTapLogautButton))
+    
 
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        logoutButton.setImage(UIImage(named: "logout_button"), for: .normal)
+        logoutButton.translatesAutoresizingMaskIntoConstraints = false
+        logoutButton.tintColor = UIColor(red: 0.961, green: 0.42, blue: 0.424, alpha: 1)
         
         addSubViews()
         applyConstraints()
@@ -77,6 +79,10 @@ final class ProfileViewController: UIViewController {
     
         
         updateAvatar()
+    }
+    
+    @objc private func didTapLogautButton() {
+        showAlert()
     }
     
     private func updateAvatar() {                                   // 8
@@ -97,8 +103,8 @@ final class ProfileViewController: UIViewController {
     
     private func addSubViews() {
         view.addSubview(profileImage)
-        view.addSubview(logoutButton)
         view.addSubview(nameLabel)
+        view.addSubview(logoutButton)
         view.addSubview(emailLabel)
         view.addSubview(descriptionLabel)
     }
@@ -110,6 +116,28 @@ final class ProfileViewController: UIViewController {
         descriptionLabel.text = profile.bio
     }
     
+    private func showAlert() {
+        UIBlockingProgressHUD.dismiss()
+        
+        let alert = UIAlertController(title: "Пока, пока!", message: "Уверены, что хотите выйти?", preferredStyle: .alert)
+        
+        alert.addAction(UIAlertAction(title: "Да", style: .default) { _ in
+            self.oAuth2TokenStorage.removeToken()
+            HTTPCookieStorage.shared.removeCookies(since: Date.distantPast)
+               WKWebsiteDataStore.default().fetchDataRecords(ofTypes: WKWebsiteDataStore.allWebsiteDataTypes()) { records in
+                  records.forEach { record in
+                     WKWebsiteDataStore.default().removeData(ofTypes: record.dataTypes, for: [record], completionHandler: {})
+                  }
+               }
+            guard let window = UIApplication.shared.windows.first else { fatalError("Invalid Configuration") }
+            window.rootViewController = SplashViewController()
+        })
+        
+        alert.addAction(UIAlertAction(title: "Нет", style: .default, handler: nil))
+        
+        present(alert, animated: true)
+    }
+    
     private func applyConstraints() {
         NSLayoutConstraint.activate([
             profileImage.topAnchor.constraint(equalTo: view.topAnchor, constant: 76),
@@ -119,14 +147,14 @@ final class ProfileViewController: UIViewController {
         ])
         
         NSLayoutConstraint.activate([
-            logoutButton.topAnchor.constraint(equalTo: view.topAnchor, constant: 100),
-            logoutButton.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -26),
-        ])
-        
-        NSLayoutConstraint.activate([
             nameLabel.topAnchor.constraint(equalTo: profileImage.bottomAnchor, constant: 8),
             nameLabel.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 16),
             nameLabel.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -124),
+        ])
+        
+        NSLayoutConstraint.activate([
+            logoutButton.topAnchor.constraint(equalTo: view.topAnchor, constant: 100),
+            logoutButton.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -26),
         ])
         
         NSLayoutConstraint.activate([
