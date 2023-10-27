@@ -18,12 +18,11 @@ final class ImagesListViewController: UIViewController {
     private let photosName: [String] = Array(0..<20).map{ "\($0)" }
     private var photos: [Photo] = []
     
-    override func viewDidAppear(_ animated: Bool) {
-        imagesListService.fetchPhotosNextPage()
-    }
-    
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        imagesListService.fetchPhotosNextPage()
+        
         navigationController?.setNavigationBarHidden(true, animated: false)
         tableView.dataSource = self
         tableView.delegate = self
@@ -49,15 +48,21 @@ final class ImagesListViewController: UIViewController {
         return formatter
     }()
     
-    func convertDate(dateValue: String) -> Date {
-        let dateFormatter = ISO8601DateFormatter()
-        let date = dateFormatter.date(from: dateValue)
-        if let date = date {
-            return date
-        } else {
-            return Date()
+    private lazy var isoDateFormatter: ISO8601DateFormatter = {
+        let formatter = ISO8601DateFormatter()
+        return formatter
+    }()
+    
+    func convertDate(dateValue: String) -> Date? {
+            let dateFormatter = ISO8601DateFormatter()
+            let date = dateFormatter.date(from: dateValue)
+            if let date = date {
+                return date
+            } else {
+                return nil
+            }
         }
-    }
+    
 
     func configCell(for cell: ImagesListCell, with indexPath: IndexPath) {
         let photo = imagesListService.photos[indexPath.row]
@@ -79,10 +84,15 @@ final class ImagesListViewController: UIViewController {
             }
             cell.isUserInteractionEnabled = true
         }
-                
+         
         guard let createdAt = photo.createdAt else { cell.dateLabel.text = ""; return }
-        cell.dateLabel.text = dateFormatter.string(from: convertDate(dateValue: createdAt))
-                
+        if convertDate(dateValue: createdAt) != nil {
+            let date = dateFormatter.date(from: createdAt)
+            if let date = date {
+                cell.dateLabel.text = dateFormatter.string(from: date)
+            }
+        }
+        
         setIsLiked(photo, cell)
     }
     

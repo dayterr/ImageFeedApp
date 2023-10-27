@@ -16,13 +16,16 @@ final class ImagesListService {
     private let urlSession = URLSession.shared
     private var pageTask: URLSessionTask?
     private var likeTask: URLSessionTask?
+    
+    private lazy var dateFormatter: ISO8601DateFormatter = {
+        let formatter = ISO8601DateFormatter()
+        return formatter
+    }()
 
     func fetchPhotosNextPage() {
         assert(Thread.isMainThread)
         
-        if pageTask != nil {
-            pageTask?.cancel()
-        }
+        if pageTask != nil { return }
         
         let nextPage = (lastLoadedPage ?? 0) + 1
         
