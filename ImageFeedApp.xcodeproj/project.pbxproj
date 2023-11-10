@@ -20,7 +20,7 @@
 		D4490F3D2AE712FB00EF8B65 /* LikeResult.swift in Sources */ = {isa = PBXBuildFile; fileRef = D4490F3C2AE712FB00EF8B65 /* LikeResult.swift */; };
 		D44EBD572A5B601E00F1007C /* SingleImageViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D44EBD562A5B601E00F1007C /* SingleImageViewController.swift */; };
 		D4920F8E2AF4165F0064B7AC /* WebViewPresenter.swift in Sources */ = {isa = PBXBuildFile; fileRef = D4920F8D2AF4165F0064B7AC /* WebViewPresenter.swift */; };
-		D492D1122A6557CA0070F768 /* Constants.swift in Sources */ = {isa = PBXBuildFile; fileRef = D492D1112A6557CA0070F768 /* Constants.swift */; };
+		D492D1122A6557CA0070F768 /* AuthConfiguration.swift in Sources */ = {isa = PBXBuildFile; fileRef = D492D1112A6557CA0070F768 /* AuthConfiguration.swift */; };
 		D492D1152A65F5460070F768 /* AuthViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D492D1142A65F5460070F768 /* AuthViewController.swift */; };
 		D492D1172A65F7430070F768 /* WebViewViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D492D1162A65F7430070F768 /* WebViewViewController.swift */; };
 		D497438C2AC35B5600C91318 /* UIBlockingProgressHUD.swift in Sources */ = {isa = PBXBuildFile; fileRef = D497438B2AC35B5600C91318 /* UIBlockingProgressHUD.swift */; };
@@ -54,7 +54,7 @@
 		D4490F3C2AE712FB00EF8B65 /* LikeResult.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LikeResult.swift; sourceTree = "<group>"; };
 		D44EBD562A5B601E00F1007C /* SingleImageViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SingleImageViewController.swift; sourceTree = "<group>"; };
 		D4920F8D2AF4165F0064B7AC /* WebViewPresenter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WebViewPresenter.swift; sourceTree = "<group>"; };
-		D492D1112A6557CA0070F768 /* Constants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Constants.swift; sourceTree = "<group>"; };
+		D492D1112A6557CA0070F768 /* AuthConfiguration.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthConfiguration.swift; sourceTree = "<group>"; };
 		D492D1142A65F5460070F768 /* AuthViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthViewController.swift; sourceTree = "<group>"; };
 		D492D1162A65F7430070F768 /* WebViewViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WebViewViewController.swift; sourceTree = "<group>"; };
 		D497438B2AC35B5600C91318 /* UIBlockingProgressHUD.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIBlockingProgressHUD.swift; sourceTree = "<group>"; };
@@ -117,7 +117,7 @@
 				D42B13F529FC454A0019737D /* Assets.xcassets */,
 				D42B13F729FC454A0019737D /* LaunchScreen.storyboard */,
 				D42B13FA29FC454A0019737D /* Info.plist */,
-				D492D1112A6557CA0070F768 /* Constants.swift */,
+				D492D1112A6557CA0070F768 /* AuthConfiguration.swift */,
 				D497438B2AC35B5600C91318 /* UIBlockingProgressHUD.swift */,
 				D49743932AD358F800C91318 /* ServiceExtension.swift */,
 				D4EB97E82ADC4C8D00F91D39 /* TabBarController.swift */,
@@ -306,7 +306,7 @@
 				D4EB97EB2ADC59D800F91D39 /* SplashViewController.swift in Sources */,
 				D4490F352AE6D71B00EF8B65 /* ImagesListService.swift in Sources */,
 				D492D1152A65F5460070F768 /* AuthViewController.swift in Sources */,
-				D492D1122A6557CA0070F768 /* Constants.swift in Sources */,
+				D492D1122A6557CA0070F768 /* AuthConfiguration.swift in Sources */,
 				D497438C2AC35B5600C91318 /* UIBlockingProgressHUD.swift in Sources */,
 				D497438F2AC486F500C91318 /* ProfileService.swift in Sources */,
 			);

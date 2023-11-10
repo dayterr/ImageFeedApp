@@ -7,8 +7,6 @@
 
 import Foundation
 
-let UnsplashAuthorizeURLString = "https://unsplash.com/oauth/authorize"
-
 protocol WebViewPresenterProtocol {
     var view: WebViewViewControllerProtocol? { get set }
     func viewDidLoad()
