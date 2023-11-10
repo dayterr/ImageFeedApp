@@ -28,6 +28,7 @@
 		D49743922AD3337600C91318 /* ProfileImageService.swift in Sources */ = {isa = PBXBuildFile; fileRef = D49743912AD3337600C91318 /* ProfileImageService.swift */; };
 		D49743942AD358F800C91318 /* ServiceExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = D49743932AD358F800C91318 /* ServiceExtension.swift */; };
 		D4A6067F2A3FB77C00BB4537 /* ImagesListCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = D4A6067E2A3FB77C00BB4537 /* ImagesListCell.swift */; };
+		D4ABA3EC2AFEFA5800830FDD /* AuthHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = D4ABA3EB2AFEFA5800830FDD /* AuthHelper.swift */; };
 		D4D63C452A689EE200A416F8 /* OAuth2Service.swift in Sources */ = {isa = PBXBuildFile; fileRef = D4D63C442A689EE200A416F8 /* OAuth2Service.swift */; };
 		D4D63C472A689F4700A416F8 /* OAuth2TokenStorage.swift in Sources */ = {isa = PBXBuildFile; fileRef = D4D63C462A689F4700A416F8 /* OAuth2TokenStorage.swift */; };
 		D4DEB1312AB7B45B00603596 /* ProgressHUD in Frameworks */ = {isa = PBXBuildFile; productRef = D4DEB1302AB7B45B00603596 /* ProgressHUD */; };
@@ -62,6 +63,7 @@
 		D49743912AD3337600C91318 /* ProfileImageService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileImageService.swift; sourceTree = "<group>"; };
 		D49743932AD358F800C91318 /* ServiceExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ServiceExtension.swift; sourceTree = "<group>"; };
 		D4A6067E2A3FB77C00BB4537 /* ImagesListCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImagesListCell.swift; sourceTree = "<group>"; };
+		D4ABA3EB2AFEFA5800830FDD /* AuthHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthHelper.swift; sourceTree = "<group>"; };
 		D4D63C442A689EE200A416F8 /* OAuth2Service.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OAuth2Service.swift; sourceTree = "<group>"; };
 		D4D63C462A689F4700A416F8 /* OAuth2TokenStorage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OAuth2TokenStorage.swift; sourceTree = "<group>"; };
 		D4EB97E82ADC4C8D00F91D39 /* TabBarController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabBarController.swift; sourceTree = "<group>"; };
@@ -161,6 +163,7 @@
 				D492D1142A65F5460070F768 /* AuthViewController.swift */,
 				D492D1162A65F7430070F768 /* WebViewViewController.swift */,
 				D4920F8D2AF4165F0064B7AC /* WebViewPresenter.swift */,
+				D4ABA3EB2AFEFA5800830FDD /* AuthHelper.swift */,
 			);
 			path = Auth;
 			sourceTree = "<group>";
@@ -291,6 +294,7 @@
 				D492D1172A65F7430070F768 /* WebViewViewController.swift in Sources */,
 				D4EB97E92ADC4C8D00F91D39 /* TabBarController.swift in Sources */,
 				D4920F8E2AF4165F0064B7AC /* WebViewPresenter.swift in Sources */,
+				D4ABA3EC2AFEFA5800830FDD /* AuthHelper.swift in Sources */,
 				D4490F372AE6D72400EF8B65 /* Photo.swift in Sources */,
 				D42B13F129FC45480019737D /* ImagesListViewController.swift in Sources */,
 				D4A6067F2A3FB77C00BB4537 /* ImagesListCell.swift in Sources */,
