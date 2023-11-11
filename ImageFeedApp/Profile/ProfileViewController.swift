@@ -78,15 +78,16 @@ final class ProfileViewController: UIViewController, ProfileViewControllerProtoc
         presenter?.view = self
         presenter?.viewDidLoad()
         
-        //updateProfile(profile: profileService.profile!)
     }
     
     @objc private func didTapLogautButton() {
         logOut()
     }
     
-    internal func updateAvatar() {                                   // 8
+    func updateAvatar() {                                   // 8
+        print("updating")
         let url = presenter?.getAvatarURL()
+        print(url)
         let processor = RoundCornerImageProcessor(cornerRadius: 20)
         profileImage.kf.indicatorType = .activity
         profileImage.kf.setImage(with: url,
@@ -106,8 +107,10 @@ final class ProfileViewController: UIViewController, ProfileViewControllerProtoc
         view.addSubview(descriptionLabel)
     }
     
-    internal func updateProfile(profile: Profile?) {
-        guard let profile = profileService.profile else { return }
+    func updateProfile(profile: Profile?) {
+        updateAvatar()
+        
+        guard let profile = profile else { return }
         nameLabel.text = profile.name
         emailLabel.text = profile.loginName
         descriptionLabel.text = profile.bio

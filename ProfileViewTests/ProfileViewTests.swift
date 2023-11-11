@@ -22,7 +22,7 @@ final class ProfileViewTests: XCTestCase {
         _ = viewController.view
 
         //then
-        XCTAssertTrue(presenter.viewLoaded)
+        XCTAssertTrue(presenter.viewDidLoadCalled)
     }
 }
 
@@ -35,11 +35,11 @@ final class ProfileViewControllerSpy: ProfileViewControllerProtocol {
 final class ProfileViewPresenterSpy: ProfileViewPresenterProtocol {
     var view: ProfileViewControllerProtocol?
     
-    var viewLoaded = false
+    var viewDidLoadCalled = false
     var loggedOut = false
     
     func viewDidLoad() {
-        viewLoaded = true
+        viewDidLoadCalled = true
     }
     
     func getAvatarURL() -> URL? {

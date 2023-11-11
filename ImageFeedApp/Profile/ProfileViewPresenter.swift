@@ -31,8 +31,9 @@ final class ProfileViewPresenter: ProfileViewPresenterProtocol {
             object: nil,
             queue: .main                                        // 5
         ) { [weak self] _ in
-            guard let self = self else { return }
-            self.getAvatarURL()                                // 6
+            guard let self = self else{ print("retunrnnin"); return }
+            self.view?.updateAvatar()
+
         }
         view?.updateProfile(profile: profileService.profile)
     }
