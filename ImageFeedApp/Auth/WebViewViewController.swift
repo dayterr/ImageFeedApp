@@ -50,6 +50,7 @@ final class WebViewViewController: UIViewController, WebViewViewControllerProtoc
         )
         
         presenter?.viewDidLoad()
+        webView.accessibilityIdentifier = "UnsplashWebView"
     }
     
     func load(request: URLRequest) {
