@@ -5,31 +5,49 @@
 //  Created by Ruth Dayter on 11.11.2023.
 //
 
+@testable import ImageFeedApp
 import XCTest
 
 final class ProfileViewTests: XCTestCase {
+    
+    func testViewControllerCallsViewDidLoad() {
+        //given
+        let viewController = ProfileViewController()
+        let presenter = ProfileViewPresenterSpy()
+        viewController.presenter = presenter
+        presenter.view = viewController
+        presenter.viewDidLoad()
 
-    override func setUpWithError() throws {
-        // Put setup code here. This method is called before the invocation of each test method in the class.
+        //when
+        _ = viewController.view
+
+        //then
+        XCTAssertTrue(presenter.viewLoaded)
     }
+}
 
-    override func tearDownWithError() throws {
-        // Put teardown code here. This method is called after the invocation of each test method in the class.
+final class ProfileViewControllerSpy: ProfileViewControllerProtocol {
+    var presenter: ProfileViewPresenterProtocol?
+    func updateAvatar() {}
+    func updateProfile(profile: Profile?) {}
+}
+
+final class ProfileViewPresenterSpy: ProfileViewPresenterProtocol {
+    var view: ProfileViewControllerProtocol?
+    
+    var viewLoaded = false
+    var loggedOut = false
+    
+    func viewDidLoad() {
+        viewLoaded = true
     }
-
-    func testExample() throws {
-        // This is an example of a functional test case.
-        // Use XCTAssert and related functions to verify your tests produce the correct results.
-        // Any test you write for XCTest can be annotated as throws and async.
-        // Mark your test throws to produce an unexpected failure when your test encounters an uncaught error.
-        // Mark your test async to allow awaiting for asynchronous code to complete. Check the results with assertions afterwards.
+    
+    func getAvatarURL() -> URL? {
+        return nil
     }
-
-    func testPerformanceExample() throws {
-        // This is an example of a performance test case.
-        measure {
-            // Put the code you want to measure the time of here.
-        }
+    
+    func logOut() {
+        loggedOut = true
     }
-
+    
 }

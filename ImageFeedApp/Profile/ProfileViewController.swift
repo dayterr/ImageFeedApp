@@ -9,8 +9,15 @@ import Kingfisher
 import UIKit
 import WebKit
 
-final class ProfileViewController: UIViewController {
+protocol ProfileViewControllerProtocol: AnyObject {
+    var presenter: ProfileViewPresenterProtocol? { get set }
+    func updateAvatar()
+    func updateProfile(profile: Profile?)
+}
+
+final class ProfileViewController: UIViewController, ProfileViewControllerProtocol {
     
+    var presenter: ProfileViewPresenterProtocol? 
     private let profileService = ProfileService.shared
     private var profileImageServiceObserver: NSObjectProtocol?
     private let oAuth2TokenStorage = OAuth2TokenStorage()
@@ -62,34 +69,24 @@ final class ProfileViewController: UIViewController {
         logoutButton.setImage(UIImage(named: "logout_button"), for: .normal)
         logoutButton.translatesAutoresizingMaskIntoConstraints = false
         logoutButton.tintColor = UIColor(red: 0.961, green: 0.42, blue: 0.424, alpha: 1)
+        view.backgroundColor = .ypBlack
         
         addSubViews()
         applyConstraints()
-        updateProfile(profile: profileService.profile!)
         
-        view.backgroundColor = .ypBlack
-        profileImageServiceObserver = NotificationCenter.default.addObserver(
-            forName: ProfileImageService.DidChangeNotification,
-            object: nil,
-            queue: .main                                        // 5
-        ) { [weak self] _ in
-            guard let self = self else { return }
-            self.updateAvatar()                                 // 6
-        }
-    
+        presenter = ProfileViewPresenter()
+        presenter?.view = self
+        presenter?.viewDidLoad()
         
-        updateAvatar()
+        //updateProfile(profile: profileService.profile!)
     }
     
     @objc private func didTapLogautButton() {
-        showAlert()
+        logOut()
     }
     
-    private func updateAvatar() {                                   // 8
-        guard
-            let profileImageURL = ProfileImageService.shared.avatarURL,
-            let url = URL(string: profileImageURL)
-        else { return }
+    internal func updateAvatar() {                                   // 8
+        let url = presenter?.getAvatarURL()
         let processor = RoundCornerImageProcessor(cornerRadius: 20)
         profileImage.kf.indicatorType = .activity
         profileImage.kf.setImage(with: url,
@@ -109,28 +106,20 @@ final class ProfileViewController: UIViewController {
         view.addSubview(descriptionLabel)
     }
     
-    private func updateProfile(profile: Profile?) {
+    internal func updateProfile(profile: Profile?) {
         guard let profile = profileService.profile else { return }
         nameLabel.text = profile.name
         emailLabel.text = profile.loginName
         descriptionLabel.text = profile.bio
     }
     
-    private func showAlert() {
+    private func logOut() {
         UIBlockingProgressHUD.dismiss()
         
         let alert = UIAlertController(title: "Пока, пока!", message: "Уверены, что хотите выйти?", preferredStyle: .alert)
         
         alert.addAction(UIAlertAction(title: "Да", style: .default) { _ in
-            self.oAuth2TokenStorage.removeToken()
-            HTTPCookieStorage.shared.removeCookies(since: Date.distantPast)
-               WKWebsiteDataStore.default().fetchDataRecords(ofTypes: WKWebsiteDataStore.allWebsiteDataTypes()) { records in
-                  records.forEach { record in
-                     WKWebsiteDataStore.default().removeData(ofTypes: record.dataTypes, for: [record], completionHandler: {})
-                  }
-               }
-            guard let window = UIApplication.shared.windows.first else { fatalError("Invalid Configuration") }
-            window.rootViewController = SplashViewController()
+            self.presenter?.logOut()
         })
         
         alert.addAction(UIAlertAction(title: "Нет", style: .default, handler: nil))
