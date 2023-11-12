@@ -28,20 +28,21 @@ final class ImageFeedAppUITests: XCTestCase {
         XCTAssertTrue(loginTextField.waitForExistence(timeout: 5))
         
         loginTextField.tap()
-        loginTextField.typeText("")
+        loginTextField.typeText("dayterrr@gmail.com")
         webView.swipeUp()
         
         let passwordTextField = webView.descendants(matching: .secureTextField).element
         XCTAssertTrue(passwordTextField.waitForExistence(timeout: 5))
         
         passwordTextField.tap()
-        passwordTextField.typeText("")
+        passwordTextField.typeText("aniruthcodertovatova!!")
         webView.swipeUp()
         
         webView.buttons["Login"].tap()
         
         let tablesQuery = app.tables
         let cell = tablesQuery.children(matching: .cell).element(boundBy: 0)
+        print("ooo", tablesQuery.count)
         
         XCTAssertTrue(cell.waitForExistence(timeout: 5))
     }
@@ -49,9 +50,14 @@ final class ImageFeedAppUITests: XCTestCase {
     func testFeed() throws {
         let tablesQuery = app.tables
         
+        print("ooo", tablesQuery.count)
+        
         let cell = tablesQuery.children(matching: .cell).element(boundBy: 0)
+        XCTAssertTrue(cell.waitForExistence(timeout: 5))
+        
         cell.swipeUp()
         
+        print("oy", cell)
         sleep(3)
         
         let cellToLike = tablesQuery.children(matching: .cell).element(boundBy: 1)
@@ -77,6 +83,7 @@ final class ImageFeedAppUITests: XCTestCase {
     
     func testProfile() throws {
         sleep(3)
+        XCTAssertTrue(app.tabBars.buttons.element(boundBy: 1).waitForExistence(timeout: 5))
         app.tabBars.buttons.element(boundBy: 1).tap()
        
         XCTAssertTrue(app.staticTexts["Name Lastname"].exists)
