@@ -42,22 +42,18 @@ final class ImageFeedAppUITests: XCTestCase {
         
         let tablesQuery = app.tables
         let cell = tablesQuery.children(matching: .cell).element(boundBy: 0)
-        print("ooo", tablesQuery.count)
         
         XCTAssertTrue(cell.waitForExistence(timeout: 5))
     }
     
     func testFeed() throws {
         let tablesQuery = app.tables
-        
-        print("ooo", tablesQuery.count)
-        
+
         let cell = tablesQuery.children(matching: .cell).element(boundBy: 0)
         XCTAssertTrue(cell.waitForExistence(timeout: 5))
         
         cell.swipeUp()
         
-        print("oy", cell)
         sleep(3)
         
         let cellToLike = tablesQuery.children(matching: .cell).element(boundBy: 1)
